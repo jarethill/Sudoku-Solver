@@ -14,7 +14,7 @@ describe('can initialize a cell', () => {
   const subgridArea = 0;
   const isSolved = true;
 
-  const cell = new Cell(y, x, value, rowMap, columnMap, subgridMap, subgridArea);
+  const cell = new Cell(x, y, value, rowMap, columnMap, subgridMap, subgridArea);
 
   it('should exist', () => {
     expect(cell).toBeInstanceOf(Cell);

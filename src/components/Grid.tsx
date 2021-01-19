@@ -9,7 +9,7 @@ interface Props {
 
 const Grid: React.FC<Props> = ({ className }) => {
   const board = Board.parse(simplePuzzle);
-  const cell = board.getCell(0, 1)!;
+  const cell = board.getCell(3, 4)!;
   // cell.solve();
   // board.solve(0, 0);
   console.log(cell);

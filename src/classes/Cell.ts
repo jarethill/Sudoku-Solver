@@ -3,9 +3,9 @@ import Column from './Column';
 import Subgrid from './Subgrid';
 
 export default class Cell {
-  private _y: number;
-
   private _x: number;
+
+  private _y: number;
 
   private _value: number;
 
@@ -69,8 +69,8 @@ export default class Cell {
   }
 
   constructor(
-    y: number,
     x: number,
+    y: number,
     value: number,
     rowMap: Map<number, Cell[]>,
     columnMap: Map<number, Cell[]>,
@@ -85,8 +85,8 @@ export default class Cell {
     this._y = y;
     this._value = value;
 
-    this._column = new Column(rowMap.get(x)!);
-    this._row = new Row(columnMap.get(y)!);
+    this._column = new Column(rowMap.get(y)!);
+    this._row = new Row(columnMap.get(x)!);
     this._subgrid = new Subgrid(subgridMap.get(subgridArea)!);
   }
 }

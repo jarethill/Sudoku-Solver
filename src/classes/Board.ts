@@ -13,8 +13,8 @@ export default class Board {
     return this._cells;
   }
 
-  public getCell(y: number, x: number) {
-    return this._board![y][x];
+  public getCell(x: number, y: number) {
+    return this._board![x][y];
   }
 
   public solve(x: number, y: number) {
@@ -60,8 +60,8 @@ export default class Board {
     // Keeps track of row length, needed to determine if the 2D array is square.
     let previousRowLength = board[0]?.length;
 
-    for (let y = 0; y < board.length; y += 1) {
-      const currentRowLength = board[y]?.length;
+    for (let x = 0; x < board.length; x += 1) {
+      const currentRowLength = board[x]?.length;
 
       if (!previousRowLength
          || currentRowLength !== previousRowLength
@@ -72,21 +72,21 @@ export default class Board {
 
       previousRowLength = currentRowLength;
 
-      cellBoard.push(columnMap.get(y)!);
+      cellBoard.push(columnMap.get(x)!);
 
-      for (let x = 0; x < board[y].length; x += 1) {
-        const value: number = +board[y][x];
+      for (let y = 0; y < board[x].length; y += 1) {
+        const value: number = +board[x][y];
 
         if (value < 0 || value > 9) {
           throw new RangeError('Board must only contain numbers between 0 and 9.');
         }
 
-        const subgridArea = 3 * Math.floor(x / 3) + Math.floor(y / 3);
+        const subgridArea = 3 * Math.floor(y / 3) + Math.floor(x / 3);
 
-        const cell = new Cell(y, x, value, rowMap, columnMap, subgridMap, subgridArea);
+        const cell = new Cell(x, y, value, rowMap, columnMap, subgridMap, subgridArea);
 
-        columnMap.get(y)!.push(cell);
-        rowMap.get(x)!.push(cell);
+        columnMap.get(x)!.push(cell);
+        rowMap.get(y)!.push(cell);
         subgridMap.get(subgridArea)!.push(cell);
 
         boardInstance._cells.push(cell);
