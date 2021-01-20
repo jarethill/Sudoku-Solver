@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { simplePuzzle, easyPuzzle, hardPuzzle } from '../data/puzzles';
+import { hardPuzzle } from '../data/puzzles';
 import Board from '../classes/Board';
 
 interface Props {
@@ -9,11 +9,19 @@ interface Props {
 
 const Grid: React.FC<Props> = ({ className }) => {
   const board = Board.parse(hardPuzzle);
-  // board.print();
+
   board.solve();
+
+  console.log(board.print());
+
+  // console.log(board);
+  // if (typeof board === 'error') {
+  //   console.log('ERROR!');
+  // }
+  // board.solve();
   // console.log('\n', '\n');
   // console.log(board.convert());
-  board.print();
+  // board.print();
   return (<div className={className}> </div>);
 };
 

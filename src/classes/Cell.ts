@@ -51,6 +51,7 @@ export default class Cell {
   }
 
   public canSolve(number: number) {
+    // Set used to avoid having to manually remove duplicates
     const impossibleNumbers = new Set<number>([
       ...this._row.values,
       ...this._column.values,

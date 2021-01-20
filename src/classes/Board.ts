@@ -17,12 +17,45 @@ export default class Board {
     return this._board![x][y];
   }
 
+  // Check's each cell to see if the board is valid (no repeated numbers in row/column/subgrid)
+  // find is used so method returns as soon as an invalid cell is detected, saving extra iterations
+  public isValid() {
+    return !this._cells.find((cell) => {
+      // Put each cell's row/column/subgrid into it's own array, used so we can loop
+      // over them cleanly
+      const allCellValues = [cell.row.values, cell.column.values, cell.subgrid.values];
+
+      // Loop over each row/column/subgrid for given cell. Standard for loops used so we can
+      // return early if we find an invalid cell
+      for (let i = 0; i < allCellValues.length; i += 1) {
+        const values = allCellValues[i].filter(((value) => value !== 0));
+
+        // foundValues object is keeping track of repeats in O(1) time
+        const foundValues: {[key: number]: boolean} = {};
+
+        // Loop over each specific value in row/column/subgrid
+        for (let j = 0; j < values.length; j += 1) {
+          const value = values[j];
+
+          if (!foundValues[value]) {
+            foundValues[value] = true;
+          } else {
+            // Return true if a repeat is found, signifying the board is invalid
+            return true;
+          }
+        }
+      }
+
+      return false;
+    });
+  }
+
   public print() {
     for (let i = 0; i < this._board!.length; i += 1) {
       const row: number[] = [];
 
       for (let j = 0; j < this._board![i].length; j += 1) {
-        row.push(this._board![i][j].value);
+        row.push(this.getCell(i, j).value);
       }
 
       // eslint-disable-next-line no-console
@@ -84,11 +117,10 @@ export default class Board {
     return false;
   }
 
-  public static parse(board: Number[][]) {
+  public static parse(board: Number[][]): Board {
     const boardInstance = new Board();
 
-    // cellBoard holds the cells as a 2D array, used for O(1) lookup of cells and
-    // faster checking of row/cell/subgrid after initial parse
+    // cellBoard holds the cells as a 2D array, used for O(1) lookup of cells
     const cellBoard: Cell[][] = [];
     boardInstance._board = cellBoard;
 
@@ -153,6 +185,12 @@ export default class Board {
         `This application only supports 3x3 Sudoku boards with 
         ${boardInstance._maxBoardSize} cells. Your board has ${boardLength || 0} cells.`,
       );
+    }
+
+    // Make sure board is valid now that all cells are parsed, and throw an exception if it's not
+    // Needs to be done before trying to solve board or backtracking algorithm will fail
+    if (!boardInstance.isValid()) {
+      throw new Error('Board is invalid.');
     }
 
     return boardInstance;
