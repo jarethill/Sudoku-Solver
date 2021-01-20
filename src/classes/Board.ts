@@ -17,22 +17,71 @@ export default class Board {
     return this._board![x][y];
   }
 
-  public solve(x: number, y: number) {
-    // const maxIndex = this._maxRowSize - 1;
-    // let row = x;
-    // let col = y;
+  public print() {
+    for (let i = 0; i < this._board!.length; i += 1) {
+      const row: number[] = [];
 
-    // if (y === maxIndex && x === maxIndex) {
-    //   return true;
-    // }
+      for (let j = 0; j < this._board![i].length; j += 1) {
+        row.push(this._board![i][j].value);
+      }
 
-    // if (y === maxIndex) {
-    //   row += 1;
-    //   col = 0;
-    // }
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(row));
+    }
+  }
 
-    // if (this._board![])
-    return this;
+  // Converts board back into a standard number array, like it would be pre-parse.
+  // Used for unit testing
+  public convert() {
+    const convertedBoard: number[][] = [];
+
+    this._board!.forEach((row) => {
+      const convertedRow = row.map((cell) => cell.value);
+      convertedBoard.push(convertedRow);
+    });
+
+    return convertedBoard;
+  }
+
+  public solve(x: number = 0, y: number = 0): boolean {
+    let row = x;
+    let col = y;
+
+    // Stop recursion once final cell is solved
+    if (col === this._maxRowSize && row === this._maxRowSize - 1) {
+      return true;
+    }
+
+    // Move to next row once current row is completed
+    if (col === this._maxRowSize) {
+      row += 1;
+      col = 0;
+    }
+
+    const cell = this.getCell(row, col);
+
+    // If current cell is solved, recurse to next cell
+    if (cell.isSolved) {
+      return this.solve(row, col + 1);
+    }
+
+    // Loop through all possible sudoku numbers
+    for (let i = 1; i <= 9; i += 1) {
+      // If number is solvable (not in Cell's row/column/subgrid)
+      if (cell.canSolve(i)) {
+        // Solve and recurse into next cell
+        cell.solve(i);
+
+        if (this.solve(row, col + 1)) {
+          return true;
+        }
+      }
+
+      // Else unsolve to reset cell to 0
+      cell.unSolve();
+    }
+
+    return false;
   }
 
   public static parse(board: Number[][]) {

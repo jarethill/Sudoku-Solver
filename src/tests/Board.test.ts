@@ -1,10 +1,12 @@
 import Board from '../classes/Board';
 import Cell from '../classes/Cell';
-import { simplePuzzle } from '../data/puzzles';
-
-const board = Board.parse(simplePuzzle);
+import {
+  simplePuzzle, easyPuzzle, easyPuzzleSolution, hardPuzzle, hardPuzzleSolution,
+} from '../data/puzzles';
 
 describe('can initialize a board', () => {
+  const board = Board.parse(simplePuzzle);
+
   it('should exist', () => {
     expect(board).toBeInstanceOf(Board);
     expect(board).toBeTruthy();
@@ -15,6 +17,9 @@ describe('can initialize a board', () => {
     expect(board).toHaveProperty('_maxRowSize', 9);
     expect(board).toHaveProperty('_maxBoardSize', 81);
     expect(board).toHaveProperty('cells');
+    expect(board).toHaveProperty('solve');
+    expect(board).toHaveProperty('convert');
+    expect(board).toHaveProperty('print');
     expect(board).toHaveProperty('getCell');
   });
 
@@ -89,5 +94,23 @@ describe('board throws errors correctly on parse', () => {
 
     expect(() => Board.parse(testBoard)).toThrow('Board must only contain numbers between 0 and 9.');
     expect(() => Board.parse(testTwoBoard)).toThrow('Board must only contain numbers between 0 and 9.');
+  });
+});
+
+describe('can solve puzzles', () => {
+  it('can solve a easy puzzle', () => {
+    const easyBoard = Board.parse(easyPuzzle);
+
+    easyBoard.solve();
+
+    expect(easyBoard.convert()).toStrictEqual(easyPuzzleSolution);
+  });
+
+  it('can solve a hard puzzle', () => {
+    const hardBoard = Board.parse(hardPuzzle);
+
+    hardBoard.solve();
+
+    expect(hardBoard.convert()).toStrictEqual(hardPuzzleSolution);
   });
 });

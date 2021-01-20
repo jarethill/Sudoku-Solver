@@ -45,27 +45,28 @@ export default class Cell {
     return this._y;
   }
 
-  public solve(): number | null {
-    if (this._isSolved) {
-      return null;
-    }
+  public unSolve() {
+    this._value = 0;
+    this._isSolved = false;
+  }
 
-    // Combine row/column/subgrid values into a set, leaving
-    // all values the cell cannot be without repeats.
+  public canSolve(number: number) {
     const impossibleNumbers = new Set<number>([
       ...this._row.values,
       ...this._column.values,
       ...this._subgrid.values,
     ]);
 
-    for (let i = 1; i < 9; i += 1) {
-      if (!impossibleNumbers.has(i)) {
-        this._value = i;
-        return i;
-      }
+    if (!impossibleNumbers.has(number)) {
+      return true;
     }
 
-    throw new Error('Impossible puzzle, cell is unsolvable');
+    return false;
+  }
+
+  public solve(number: number): void {
+    this._value = number;
+    this._isSolved = true;
   }
 
   constructor(
