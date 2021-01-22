@@ -1,7 +1,6 @@
 # Sudoku Solver
 
-A standard sudoku solver with UI. Frontend built with React, however all functionality is encapsulated into their own
-classes, should you wish to use the code with a different frontend.
+A standard sudoku solver built using Object Oriented Programming & utilizing the backtracking algorithm. Frontend built with React; however all functionality is encapsulated into their own classes, should you wish to use the code with another frontend framework or Vanilla Javascript.
 
 ## Technologies Used
 
@@ -9,3 +8,4 @@ classes, should you wish to use the code with a different frontend.
 -   Typescript
 -   Jest (Unit Testing)
 -   Styled Components
+-   ESLint (Airbnb Config)
