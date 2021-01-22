@@ -13,6 +13,10 @@ export default class Board {
     return this._cells;
   }
 
+  public get board() {
+    return this._board;
+  }
+
   public getCell(x: number, y: number) {
     return this._board![x][y];
   }
@@ -100,7 +104,7 @@ export default class Board {
 
     // Loop through all possible sudoku numbers
     for (let i = 1; i <= 9; i += 1) {
-      // If number is solvable (not in Cell's row/column/subgrid)
+      // If number can be placed (not in Cell's row/column/subgrid)
       if (cell.canSolve(i)) {
         // Solve and recurse into next cell
         cell.solve(i);
@@ -188,7 +192,7 @@ export default class Board {
     }
 
     // Make sure board is valid now that all cells are parsed, and throw an exception if it's not
-    // Needs to be done before trying to solve board or backtracking algorithm will fail
+    // Needs to be done before trying to solve board or backtracking algorithm will never finish
     if (!boardInstance.isValid()) {
       throw new Error('Board is invalid.');
     }
@@ -197,7 +201,7 @@ export default class Board {
   }
 
   // Use static parse method to initialize an instance.
-  private constructor() {
+  public constructor() {
     return this;
   }
 }

@@ -1,32 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { hardPuzzle } from '../data/puzzles';
+import styled from 'styled-components';
+import Cell from './Cell';
 import Board from '../classes/Board';
 
 interface Props {
-  className?: string
+  className?: string,
+  board?: Board | null,
 }
 
-const Grid: React.FC<Props> = ({ className }) => {
-  const board = Board.parse(hardPuzzle);
+const StyledCell = styled(Cell)`
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  box-sizing: content-box;
+`;
 
-  board.solve();
-
-  console.log(board.print());
-
-  // console.log(board);
-  // if (typeof board === 'error') {
-  //   console.log('ERROR!');
-  // }
-  // board.solve();
-  // console.log('\n', '\n');
-  // console.log(board.convert());
-  // board.print();
-  return (<div className={className}> </div>);
-};
+const Grid: React.FC<Props> = ({ className, board }) => (
+  <div className={className}>
+    {board && board.cells.map((cell) => (
+      <StyledCell
+        key={`${cell.x},${cell.y}`}
+        cell={cell}
+      />
+    ))}
+  </div>
+);
 
 Grid.propTypes = {
   className: PropTypes.string.isRequired,
+  board: PropTypes.instanceOf(Board),
+};
+
+Grid.defaultProps = {
+  board: null,
 };
 
 export default Grid;

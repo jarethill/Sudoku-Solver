@@ -17,8 +17,14 @@ export default class Cell {
 
   private _isSolved = false;
 
+  private _isMutable = true;
+
   get isSolved() {
     return this._isSolved;
+  }
+
+  get isMutable() {
+    return this._isMutable;
   }
 
   get row() {
@@ -51,7 +57,6 @@ export default class Cell {
   }
 
   public canSolve(number: number) {
-    // Set used to avoid having to manually remove duplicates
     const impossibleNumbers = new Set<number>([
       ...this._row.values,
       ...this._column.values,
@@ -81,14 +86,15 @@ export default class Cell {
   ) {
     if (value > 0) {
       this._isSolved = true;
+      this._isMutable = false;
     }
 
     this._x = x;
     this._y = y;
     this._value = value;
 
-    this._column = new Column(rowMap.get(y)!);
     this._row = new Row(columnMap.get(x)!);
+    this._column = new Column(rowMap.get(y)!);
     this._subgrid = new Subgrid(subgridMap.get(subgridArea)!);
   }
 }
