@@ -54,6 +54,7 @@ export default class Board {
     });
   }
 
+  // For debugging
   public print() {
     for (let i = 0; i < this._board!.length; i += 1) {
       const row: number[] = [];

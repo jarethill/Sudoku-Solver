@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import styled from 'styled-components';
-import Grid from './components/Grid';
 import Board from './classes/Board';
 import { hardPuzzle } from './data/puzzles';
-import Styled from './components/ControlBar/Styles';
+import { ControlBar as StyledControlBar } from './components/ControlBar/Styles';
+import { StyledGrid } from './components/Grid/Styles';
 
 const MainTitle = styled.h1`
   color: #683aea;
@@ -13,20 +13,6 @@ const MainTitle = styled.h1`
   width: 90%;
   display: block;
   margin: 0 auto;
-`;
-
-const StyledGrid = styled(Grid)`
-  width: 700px;
-  height: 700px;
-  max-width: 90%;
-  max-height: 90vw;
-  background: white;
-  margin-top: 1.5em;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  align-items: center;
-  justify-content: center;
-  grid-gap: 1px;
 `;
 
 const solvePuzzle = (e: React.MouseEvent) => {
@@ -52,7 +38,7 @@ const App: React.FC = () => {
     <div id="app">
       <MainTitle>Sudoku Solver</MainTitle>
       <StyledGrid board={board} />
-      <Styled.ControlBar solvePuzzle={solvePuzzle} />
+      <StyledControlBar solvePuzzle={solvePuzzle} />
     </div>
   );
 };

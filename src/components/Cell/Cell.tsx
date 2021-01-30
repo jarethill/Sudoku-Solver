@@ -1,33 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import CellClass from '../classes/Cell';
+import CellClass from '../../classes/Cell';
+import Styled from './Styles';
 
 interface Props {
   cell: CellClass,
   className?: string,
 }
-
-const baseCellStyling = `
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  font-size: 1.5rem;
-  border: 0;
-`;
-
-const ImmutableCell = styled.p`
-  ${baseCellStyling}
-  background: #683aea;
-  color: white;
-`;
-
-const MutableCell = styled.input`
-  ${baseCellStyling}
-  text-align: center;
-`;
 
 const Cell: React.FC<Props> = ({ className, cell }) => {
   const [value, setValue] = useState(cell.value);
@@ -58,16 +37,16 @@ const Cell: React.FC<Props> = ({ className, cell }) => {
   return (
     <div className={className}>
       {cell.isMutable ? (
-        <MutableCell
+        <Styled.MutableCell
           type="text"
           value={value > 0 ? value : ''}
           style={styling}
           onChange={handleChange}
         />
       ) : (
-        <ImmutableCell style={styling} onChange={handleChange}>
+        <Styled.ImmutableCell style={styling} onChange={handleChange}>
           {value > 0 && value}
-        </ImmutableCell>
+        </Styled.ImmutableCell>
       )}
     </div>
   );
