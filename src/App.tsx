@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Grid from './components/Grid';
 import Board from './classes/Board';
 import { hardPuzzle } from './data/puzzles';
+import Styled from './components/ControlBar/Styles';
 
 const MainTitle = styled.h1`
   color: #683aea;
@@ -28,6 +29,12 @@ const StyledGrid = styled(Grid)`
   grid-gap: 1px;
 `;
 
+const solvePuzzle = (e: React.MouseEvent) => {
+  const target = e.target as HTMLButtonElement;
+
+  console.log(target);
+};
+
 const App: React.FC = () => {
   const [puzzle] = useState(hardPuzzle);
   const [board, setBoard] = useState<Board | null>(null);
@@ -45,6 +52,7 @@ const App: React.FC = () => {
     <div id="app">
       <MainTitle>Sudoku Solver</MainTitle>
       <StyledGrid board={board} />
+      <Styled.ControlBar solvePuzzle={solvePuzzle} />
     </div>
   );
 };

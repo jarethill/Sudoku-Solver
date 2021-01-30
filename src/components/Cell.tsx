@@ -38,7 +38,7 @@ const Cell: React.FC<Props> = ({ className, cell }) => {
     // to be changed even when another value is in place
     const targetValue = +e.target.value[e.target.value.length - 1];
 
-    if (targetValue >= 0 && targetValue <= 9) {
+    if ((targetValue >= 0 && targetValue <= 9) || !targetValue) {
       setValue(targetValue);
     }
   };
