@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Styled from '../Button/Styles';
-import { Button } from '../../styled-components/Global';
+import { Button as GlobalButton } from '../../styled-components/Global';
 
 interface Props {
   className?: string,
@@ -10,7 +10,7 @@ interface Props {
 
 const ControlBar: React.FC<Props> = ({ className, solvePuzzle }) => (
   <div className={className}>
-    <Styled.Button as={Button} handleClick={solvePuzzle}>Solve</Styled.Button>
+    <Styled.Button as={GlobalButton} handleClick={solvePuzzle}>Solve</Styled.Button>
   </div>
 );
 
