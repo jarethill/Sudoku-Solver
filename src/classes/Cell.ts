@@ -19,6 +19,16 @@ export default class Cell {
 
   private _isMutable = true;
 
+  private _showError = false;
+
+  get showError() {
+    return this._showError;
+  }
+
+  set showError(bool: boolean) {
+    this._showError = bool;
+  }
+
   get isSolved() {
     return this._isSolved;
   }

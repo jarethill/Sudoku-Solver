@@ -1,4 +1,5 @@
 import Cell from './Cell';
+import BoardError from './BoardError';
 
 export default class Board {
   private _board?: Cell[][];
@@ -23,8 +24,10 @@ export default class Board {
 
   // Check's each cell to see if the board is valid (no repeated numbers in row/column/subgrid)
   // find is used so method returns as soon as an invalid cell is detected, saving extra iterations
-  public isValid() {
-    return !this._cells.find((cell) => {
+  public isValid(): boolean | [number, number] {
+    let invalidCellCoordinates: [number, number];
+
+    const foundInvalidCell = this._cells.find((cell) => {
       // Put each cell's row/column/subgrid into it's own array, used so we can loop
       // over them cleanly
       const allCellValues = [cell.row.values, cell.column.values, cell.subgrid.values];
@@ -44,7 +47,12 @@ export default class Board {
           if (!foundValues[value]) {
             foundValues[value] = true;
           } else {
-            // Return true if a repeat is found, signifying the board is invalid
+            // Return true if repeat is found, signifying the board is invalid and return coords
+            const erroredCell = cell.subgrid.cells.find(
+              (subgridCell) => subgridCell.value === value,
+            );
+
+            invalidCellCoordinates = [erroredCell!.x, erroredCell!.y];
             return true;
           }
         }
@@ -52,6 +60,12 @@ export default class Board {
 
       return false;
     });
+
+    if (foundInvalidCell) {
+      return invalidCellCoordinates!;
+    }
+
+    return true;
   }
 
   // For debugging
@@ -69,7 +83,6 @@ export default class Board {
   }
 
   // Converts board back into a standard number array, like it would be pre-parse.
-  // Used for unit testing
   public convert() {
     const convertedBoard: number[][] = [];
 
@@ -194,8 +207,10 @@ export default class Board {
 
     // Make sure board is valid now that all cells are parsed, and throw an exception if it's not
     // Needs to be done before trying to solve board or backtracking algorithm will never finish
-    if (!boardInstance.isValid()) {
-      throw new Error('Board is invalid.');
+    const boardIsValid = boardInstance.isValid();
+
+    if (boardIsValid !== true && typeof boardIsValid === 'object') {
+      throw new BoardError('Board is invalid.', boardIsValid);
     }
 
     return boardInstance;
