@@ -9,34 +9,49 @@ import { cloneBoard } from './utilities/utility-functions';
 
 const MainTitle = styled.h1`
   color: #683aea;
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
-  width: 90%;
   display: block;
   margin-bottom: .5em;
+  margin-top: 1em;
 `;
 
 const App: React.FC = () => {
   const [puzzle, setPuzzle] = useState(emptyPuzzle);
   const [board, setBoard] = useState<Board | null>(null);
+  const [isSolved, setIsSolved] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const resetPuzzle = () => {
+    setBoard(Board.parse(emptyPuzzle));
+    setPuzzle(emptyPuzzle);
+    setIsSolved(false);
+  };
 
   const solvePuzzle = () => {
     try {
       const parsedBoard = Board.parse(puzzle);
       parsedBoard.solve();
-
       setBoard(parsedBoard);
       setPuzzle(parsedBoard!.convert());
 
-      setErrorMessage('');
+      // In cases where board is parsed completely and left with unsolveable cells
+      // notify user & allow cells to be editable again
+      const isImpossibleBoard = parsedBoard.cells.find((cell) => cell.value === 0);
+
+      if (isImpossibleBoard) {
+        setErrorMessage('Impossible board.');
+        parsedBoard.setAllMutable();
+      } else {
+        setErrorMessage('');
+        setIsSolved(true);
+        parsedBoard.setAllImmutable();
+      }
     } catch (error) {
       setErrorMessage(error.message);
       const clonedPuzzle = cloneBoard(puzzle);
 
-      error.invalidCellCoordinates.forEach((tuple: [number, number]) => {
-        const [x, y] = tuple;
-
+      error.invalidCellCoordinates.forEach(([x, y]: [number, number]) => {
         clonedPuzzle[x][y] = 0;
       });
 
@@ -45,11 +60,8 @@ const App: React.FC = () => {
       const parsedBoard = Board.parse(clonedPuzzle);
       parsedBoard.setAllMutable();
 
-      console.log(error.invalidCellCoordinates);
-
-      error.invalidCellCoordinates.forEach((tuple: [number, number]) => {
-        const [x, y] = tuple;
-        parsedBoard.board![x][y].showError = true;
+      error.invalidCellCoordinates.forEach(([x, y]: [number, number]) => {
+        parsedBoard.getCell(x, y).showError = true;
       });
 
       setBoard(parsedBoard);
@@ -68,7 +80,12 @@ const App: React.FC = () => {
     <div id="app">
       <MainTitle>Sudoku Solver</MainTitle>
       <StyledGrid board={board} setPuzzle={setPuzzle} />
-      <StyledControlBar solvePuzzle={solvePuzzle} errorMessage={errorMessage} />
+      <StyledControlBar
+        solvePuzzle={solvePuzzle}
+        errorMessage={errorMessage}
+        resetPuzzle={resetPuzzle}
+        isSolved={isSolved}
+      />
     </div>
   );
 };

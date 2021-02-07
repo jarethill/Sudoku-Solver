@@ -16,17 +16,29 @@ const Cell: React.FC<Props> = ({
   const [value, setValue] = useState(cell.value);
   const [styling, setStyling] = useState({});
 
+  // Sets cursor to end of input field, needed to correctly
+  // overwrite prior value
+  const handleFocus = (
+    e: React.FocusEvent<HTMLInputElement> |
+    React.MouseEvent<HTMLInputElement, MouseEvent>,
+  ) => {
+    const target = e.target as HTMLInputElement;
+
+    target.scrollLeft = target.scrollWidth;
+    target.setSelectionRange(target.value.length, target.value.length);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Grabs the last character in input string before converting to number. This allows the value
     // to be changed even when another value is in place
     const targetValue = +e.target.value[e.target.value.length - 1];
 
     if ((targetValue >= 0 && targetValue <= 9) || !targetValue) {
-      setValue(() => targetValue);
+      setValue(() => targetValue || 0);
 
       setPuzzle((oldBoard) => {
         const newBoard = cloneBoard(oldBoard);
-        newBoard[cell.x][cell.y] = targetValue;
+        newBoard[cell.x][cell.y] = targetValue || 0;
 
         return newBoard;
       });
@@ -57,9 +69,11 @@ const Cell: React.FC<Props> = ({
           value={value > 0 ? value : ''}
           style={styling}
           onChange={handleChange}
+          onClick={handleFocus}
+          onFocus={handleFocus}
         />
       ) : (
-        <Styled.ImmutableCell style={styling} onChange={handleChange}>
+        <Styled.ImmutableCell style={styling}>
           {value > 0 && value}
         </Styled.ImmutableCell>
       )}
