@@ -51,6 +51,8 @@ const App: React.FC = () => {
       setErrorMessage(error.message);
       const clonedPuzzle = cloneBoard(puzzle);
 
+      // Set invalid cells to 0 in puzzle, used to prevent error
+      // when board is parsed
       error.invalidCellCoordinates.forEach(([x, y]: [number, number]) => {
         clonedPuzzle[x][y] = 0;
       });
@@ -60,6 +62,7 @@ const App: React.FC = () => {
       const parsedBoard = Board.parse(clonedPuzzle);
       parsedBoard.setAllMutable();
 
+      // Show error on same errored cells on the UI after parse is complete
       error.invalidCellCoordinates.forEach(([x, y]: [number, number]) => {
         parsedBoard.getCell(x, y).showError = true;
       });
