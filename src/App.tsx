@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import styled from 'styled-components';
 import Board from './classes/Board';
-import { hardPuzzle, emptyPuzzle } from './data/puzzles';
+import { emptyPuzzle } from './data/puzzles';
 import { ControlBar as StyledControlBar } from './components/ControlBar/Styles';
 import { StyledGrid } from './components/Grid/Styles';
 import { cloneBoard } from './utilities/utility-functions';
