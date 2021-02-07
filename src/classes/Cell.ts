@@ -53,6 +53,10 @@ export default class Cell {
     return this._value;
   }
 
+  set value(value) {
+    this._value = value;
+  }
+
   public get x() {
     return this._x;
   }
@@ -64,6 +68,10 @@ export default class Cell {
   public unSolve() {
     this._value = 0;
     this._isSolved = false;
+  }
+
+  public setMutable(bool: boolean) {
+    this._isMutable = bool;
   }
 
   public canSolve(number: number) {

@@ -24,45 +24,77 @@ export default class Board {
 
   // Check's each cell to see if the board is valid (no repeated numbers in row/column/subgrid)
   // find is used so method returns as soon as an invalid cell is detected, saving extra iterations
-  public isValid(): boolean | [number, number] {
-    let invalidCellCoordinates: [number, number];
+  public isValid(): boolean | Array<[number, number]> {
+    const invalidCellCoordinates: Array<[number, number]> = [];
+    let foundInvalidCell = false;
 
-    const foundInvalidCell = this._cells.find((cell) => {
-      // Put each cell's row/column/subgrid into it's own array, used so we can loop
-      // over them cleanly
-      const allCellValues = [cell.row.values, cell.column.values, cell.subgrid.values];
+    for (let x = 0; x < this._board!.length; x += 1) {
+      for (let y = 0; y < this._board![x].length; y += 1) {
+        const cell = this._board![x][y];
 
-      // Loop over each row/column/subgrid for given cell. Standard for loops used so we can
-      // return early if we find an invalid cell
-      for (let i = 0; i < allCellValues.length; i += 1) {
-        const values = allCellValues[i].filter(((value) => value !== 0));
+        // Put each cell's row/column/subgrid into it's own array, used so we can loop
+        // over them cleanly
+        const allCellValues = [cell.row.values, cell.column.values, cell.subgrid.values];
 
-        // foundValues object is keeping track of repeats in O(1) time
-        const foundValues: {[key: number]: boolean} = {};
+        // Loop over each row/column/subgrid for given cell
+        for (let i = 0; i < allCellValues.length; i += 1) {
+          const values = allCellValues[i].filter(((value) => value !== 0));
 
-        // Loop over each specific value in row/column/subgrid
-        for (let j = 0; j < values.length; j += 1) {
-          const value = values[j];
+          // foundValues object is keeping track of repeats in O(1) time
+          const foundValues: {[key: number]: [number, number]} = {};
 
-          if (!foundValues[value]) {
-            foundValues[value] = true;
-          } else {
-            // Return true if repeat is found, signifying the board is invalid and return coords
-            const erroredCell = cell.subgrid.cells.find(
-              (subgridCell) => subgridCell.value === value,
-            );
+          // Loop over each specific value in row/column/subgrid
+          for (let j = 0; j < values.length; j += 1) {
+            const value = values[j];
 
-            invalidCellCoordinates = [erroredCell!.x, erroredCell!.y];
-            return true;
+            if (!foundValues[value]) {
+              foundValues[value] = [x, y];
+            } else {
+              invalidCellCoordinates.push([x, y]);
+              cell.value = 0;
+              cell.showError = true;
+
+              foundInvalidCell = true;
+            }
           }
         }
       }
+    }
 
-      return false;
-    });
+    // this._cells.forEach((cell) => {
+    //   // Put each cell's row/column/subgrid into it's own array, used so we can loop
+    //   // over them cleanly
+    //   const allCellValues = [cell.row.values, cell.column.values, cell.subgrid.values];
+
+    //   // Loop over each row/column/subgrid for given cell. Standard for loops used so we can
+    //   // return early if we find an invalid cell
+    //   for (let i = 0; i < allCellValues.length; i += 1) {
+    //     const values = allCellValues[i].filter(((value) => value !== 0));
+
+    //     // foundValues object is keeping track of repeats in O(1) time
+    //     const foundValues: {[key: number]: boolean} = {};
+
+    //     // Loop over each specific value in row/column/subgrid
+    //     for (let j = 0; j < values.length; j += 1) {
+    //       const value = values[j];
+
+    //       if (!foundValues[value]) {
+    //         foundValues[value] = true;
+    //       } else {
+    //         // Return true if repeat is found, signifying the board is invalid and return coords
+    //         const erroredCell = cell.subgrid.cells.find(
+    //           (subgridCell) => subgridCell.value === value,
+    //         );
+
+    //         invalidCellCoordinates.push([erroredCell!.x, erroredCell!.y]);
+    //         foundInvalidCell = true;
+    //       }
+    //     }
+    //   }
+    // });
 
     if (foundInvalidCell) {
-      return invalidCellCoordinates!;
+      return invalidCellCoordinates;
     }
 
     return true;
@@ -92,6 +124,12 @@ export default class Board {
     });
 
     return convertedBoard;
+  }
+
+  public setAllMutable() {
+    this.cells.forEach((cell) => {
+      cell.setMutable(true);
+    });
   }
 
   public solve(x: number = 0, y: number = 0): boolean {
@@ -210,6 +248,22 @@ export default class Board {
     const boardIsValid = boardInstance.isValid();
 
     if (boardIsValid !== true && typeof boardIsValid === 'object') {
+      // boardIsValid.forEach((tuple) => {
+      //   const [x, y] = tuple;
+
+      //   const erroredCell = boardInstance._board![x][y];
+
+      //   erroredCell.value = 0;
+      //   erroredCell.showError = true;
+      // });
+      // const [x, y] = boardIsValid;
+      // const erroredCell = boardInstance._board[x][y];
+
+      // erroredCell.value = 0;
+      // erroredCell.showError = true;
+
+      // boardIsValid = boardInstance.isValid();
+
       throw new BoardError('Board is invalid.', boardIsValid);
     }
 

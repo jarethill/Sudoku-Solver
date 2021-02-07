@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CellClass from '../../classes/Cell';
 import Styled from './Styles';
+import { cloneBoard } from '../../utilities/utility-functions';
 
 interface Props {
   cell: CellClass,
   className?: string,
   setPuzzle: React.Dispatch<React.SetStateAction<number[][]>>,
 }
-
-const cloneBoard = (board: number[][]) => board.map((arr: number[]) => arr.slice());
 
 const Cell: React.FC<Props> = ({
   className, cell, setPuzzle,
@@ -34,7 +33,8 @@ const Cell: React.FC<Props> = ({
     }
   };
 
-  // Set cross borders to mark subgrids on board & update cell values
+  // Set cross borders to mark subgrids on board & update cell values. Set error background
+  // if cell is invalid.
   useEffect(() => {
     const crossStyling = {
       borderTop: [3, 6].includes(cell.x) ? '1px solid #000' : '',
@@ -42,6 +42,7 @@ const Cell: React.FC<Props> = ({
       borderBottom: [2, 5].includes(cell.x) ? '1px solid #000' : '',
       borderLeft: [3, 6].includes(cell.y) ? '1px solid #000' : '',
       background: cell.showError ? 'red' : '',
+      color: cell.showError ? 'white' : '',
     };
 
     setStyling(crossStyling);

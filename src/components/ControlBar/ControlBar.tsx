@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Styled from '../Button/Styles';
-import { ErrorMessage } from '../ControlBar/Styles';
+import { ErrorMessage } from './Styles';
 import { Button as GlobalButton } from '../../styled-components/Global';
 
 interface Props {
   className?: string,
-  solvePuzzle: (e: React.MouseEvent) => void,
+  solvePuzzle: () => void,
   errorMessage?: string,
 }
 
