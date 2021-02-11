@@ -13,6 +13,11 @@ export const StyledGrid = styled(Grid)`
   align-items: center;
   justify-content: center;
   grid-gap: 1px;
+
+  @media screen and (min-width: 500px) {
+    width: 600px;
+    height: 600px;
+  }
 `;
 
 export default {

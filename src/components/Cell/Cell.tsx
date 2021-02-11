@@ -8,10 +8,12 @@ interface Props {
   cell: CellClass,
   className?: string,
   setPuzzle: React.Dispatch<React.SetStateAction<number[][]>>,
+  isSolved: boolean,
+  setIsSolved: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const Cell: React.FC<Props> = ({
-  className, cell, setPuzzle,
+  className, cell, setPuzzle, isSolved, setIsSolved,
 }) => {
   const [value, setValue] = useState(cell.value);
   const [styling, setStyling] = useState({});
@@ -42,6 +44,10 @@ const Cell: React.FC<Props> = ({
 
         return newBoard;
       });
+
+      if (isSolved) {
+        setIsSolved(false);
+      }
     }
   };
 
@@ -85,6 +91,8 @@ Cell.propTypes = {
   cell: PropTypes.instanceOf(CellClass).isRequired,
   className: PropTypes.string.isRequired,
   setPuzzle: PropTypes.func.isRequired,
+  isSolved: PropTypes.bool.isRequired,
+  setIsSolved: PropTypes.func.isRequired,
 };
 
 export default Cell;

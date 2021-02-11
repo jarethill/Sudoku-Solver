@@ -8,6 +8,10 @@ export const Button = styled(StyledButtonComponent)`
   transition: all 0.3s ease;
   border: 1px solid transparent;
 
+  @media screen and (min-width: 500px) {
+    font-size: 1.25rem;
+  }
+
   &:hover {
     opacity: .8;
   }

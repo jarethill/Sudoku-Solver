@@ -8,6 +8,10 @@ export const ControlBar = styled(ControlBarComponent)`
   margin: 1em 0 1em 0;
   display: flex;
   justify-content: space-between;
+
+  @media screen and (min-width: 500px) {
+    width: 600px;
+  }
 `;
 
 export const ErrorMessage = styled.p`

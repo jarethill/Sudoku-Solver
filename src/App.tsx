@@ -14,6 +14,10 @@ const MainTitle = styled.h1`
   display: block;
   margin-bottom: .5em;
   margin-top: 1em;
+
+  @media screen and (min-width: 500px) {
+    font-size: 3rem;
+  }
 `;
 
 const App: React.FC = () => {
@@ -45,7 +49,6 @@ const App: React.FC = () => {
       } else {
         setErrorMessage('');
         setIsSolved(true);
-        parsedBoard.setAllImmutable();
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -82,7 +85,12 @@ const App: React.FC = () => {
   return (
     <div id="app">
       <MainTitle>Sudoku Solver</MainTitle>
-      <StyledGrid board={board} setPuzzle={setPuzzle} />
+      <StyledGrid
+        board={board}
+        setPuzzle={setPuzzle}
+        isSolved={isSolved}
+        setIsSolved={setIsSolved}
+      />
       <StyledControlBar
         solvePuzzle={solvePuzzle}
         errorMessage={errorMessage}
