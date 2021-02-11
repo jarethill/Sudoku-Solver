@@ -2,6 +2,7 @@
   "name": "sudoku-solver",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jarethill.github.io/sudoku-solver",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -23,7 +24,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint '.'"
+    "lint": "eslint '.'",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -32,7 +35,9 @@
       "airbnb-typescript"
     ],
     "parserOptions": {
-      "project": ["./tsconfig.json"]
+      "project": [
+        "./tsconfig.json"
+      ]
     },
     "rules": {
       "no-unused-vars": "warn",
@@ -63,7 +68,8 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
-    "eslint-plugin-react-hooks": "^4.0.8"
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "gh-pages": "^3.1.0"
   },
   "resolutions": {
     "styled-components": "^5"
